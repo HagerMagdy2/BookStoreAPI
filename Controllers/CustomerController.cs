@@ -121,5 +121,9 @@ namespace BookStoreAPI.Controllers
             }
             return Ok(CustomerDTO);
         }
+        [HttpGet("{id}")]
+        public IActionResult getById(int id)
+        {
+        }
     }
 }
