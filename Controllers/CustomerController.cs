@@ -104,7 +104,7 @@ namespace BookStoreAPI.Controllers
         public IActionResult getAll()
         {
             var customers = userManager.GetUsersInRoleAsync("customer").Result.OfType<Customer>().ToList();
-            if(!customers.Any()) return NotFound();
+            if (!customers.Any()) return NotFound();
             List<SelectCustomerDTO> CustomerDTO = new List<SelectCustomerDTO>();
             foreach (var cust in customers)
             {
@@ -122,8 +122,23 @@ namespace BookStoreAPI.Controllers
             return Ok(CustomerDTO);
         }
         [HttpGet("{id}")]
-        public IActionResult getById(int id)
+        public IActionResult getById(string id)
         {
+            //By Role
+            var cus =(Customer) userManager.GetUsersInRoleAsync("customer").Result.Where(n => n.Id == id).FirstOrDefault();
+           //tofind any user without role
+           // var cust = (Customer)userManager.FindByIdAsync(id).Result;
+            if (cus == null) return NotFound();
+            SelectCustomerDTO CustomerDTO = new SelectCustomerDTO()
+            {
+                id = cus.Id,
+                fullname = cus.fullname,
+                username = cus.UserName,
+                email = cus.Email,
+                Address = cus.address,
+                phonenumber = cus.PhoneNumber,
+            };
+            return Ok(CustomerDTO);
         }
     }
 }
