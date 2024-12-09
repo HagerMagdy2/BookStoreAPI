@@ -1,7 +1,10 @@
 
 using BookStoreAPI.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace BookStoreAPI
 {
@@ -22,6 +25,30 @@ namespace BookStoreAPI
             #endregion
 
             builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<BookStoreContext>();
+
+            #region Authantication 
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+
+            }).AddJwtBearer(op =>
+            {
+                op.SaveToken = true;
+                #region generate Secret Key
+                string key = "hello it is a new security key to generate token using JWT";
+                var securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key));
+                #endregion
+                op.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    IssuerSigningKey = securityKey,
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                };
+
+            });
+            #endregion
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();

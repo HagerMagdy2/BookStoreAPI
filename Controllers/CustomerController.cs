@@ -1,5 +1,6 @@
 ﻿using BookStoreAPI.DTOs.CustomerDTO;
 using BookStoreAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -101,6 +102,8 @@ namespace BookStoreAPI.Controllers
             }
         }
         [HttpGet]
+        // [Authorize(Roles ="admin")]
+      //  [AllowAnonymous]
         public IActionResult getAll()
         {
             var customers = userManager.GetUsersInRoleAsync("customer").Result.OfType<Customer>().ToList();

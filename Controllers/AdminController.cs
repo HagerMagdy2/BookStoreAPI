@@ -1,6 +1,5 @@
-﻿using BookStoreAPI.DTOs.CustomerDTO;
+﻿using BookStoreAPI.DTOs.AdminDTOs;
 using BookStoreAPI.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,25 +17,23 @@ namespace BookStoreAPI.Controllers
             this.roleManager = roleManager;
         }
         [HttpPost]
-        public IActionResult create(AddCustomerDTO customer)
+        public IActionResult create(AddAdminDTO admin)
         {
-            Customer cust = new Customer()
+            Admin admin1 = new Admin()
             {
-                Email = customer.email,
-                UserName = customer.username,
-                address = customer.Address,
-                PhoneNumber = customer.phonenumber,
-                fullname = customer.fullname,
+                Email = admin.email,
+                UserName = admin.username,
+                PhoneNumber = admin.phonenumber,
             };
-            IdentityResult result = userManager.CreateAsync(cust, customer.password).Result;
+            IdentityResult result = userManager.CreateAsync(admin1, admin.password).Result;
             if (result.Succeeded)
             {
-                IdentityRole _role = roleManager.FindByNameAsync("customer").Result;
+                IdentityRole _role = roleManager.FindByNameAsync("admin").Result;
                 // roleManager.FindByNameAsync("customer").Result;
                 // await _role=  roleManager.FindByNameAsync("customer");
                 if (_role != null)
                 {
-                    IdentityResult roleResult = userManager.AddToRoleAsync(cust, _role.Name).Result;
+                    IdentityResult roleResult = userManager.AddToRoleAsync(admin1, _role.Name).Result;
                     if (roleResult.Succeeded)
                     {
                         return Ok();
