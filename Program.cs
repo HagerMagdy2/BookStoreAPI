@@ -1,5 +1,6 @@
 
 using BookStoreAPI.Models;
+using BookStoreAPI.UnitOfWork;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +21,7 @@ namespace BookStoreAPI
             #region Connection DB
             builder.Services.AddDbContext<BookStoreContext>(options =>
             {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefautCon"));
+                options.UseLazyLoadingProxies().UseSqlServer(builder.Configuration.GetConnectionString("DefautCon"));
             });
             #endregion
 
@@ -53,6 +54,8 @@ namespace BookStoreAPI
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddScoped<UnitOFWork>();
 
             var app = builder.Build();
 
