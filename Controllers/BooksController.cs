@@ -3,6 +3,7 @@ using BookStoreAPI.Models;
 using BookStoreAPI.UnitOfWork;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace BookStoreAPI.Controllers
 {
@@ -18,6 +19,8 @@ namespace BookStoreAPI.Controllers
 
         }
         [HttpGet]
+        [SwaggerOperation(Summary ="Get all Bookes",Description =" Example: http://localhost/api/books")]
+        [SwaggerResponse(200,"Return all books",typeof(List<DisplayBookDTO>))]
         public IActionResult getAll()
         {
             List<Book> books = _unit.BooksRepositry.selectall();
@@ -40,6 +43,9 @@ namespace BookStoreAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [SwaggerOperation(Summary = "Get Book from using ID", Description = " Example: http://localhost/api/books/{id}")]
+        [SwaggerResponse(200, "Return Book Data", typeof(DisplayBookDTO))]
+        [SwaggerResponse(404, "Return not Found")] 
         public IActionResult getById(int id)
         {
             Book book = _unit.BooksRepositry.selectbyid(id);
@@ -65,6 +71,9 @@ namespace BookStoreAPI.Controllers
         }
         [HttpPost]
         [Authorize(Roles ="admin")]
+        [SwaggerOperation(Summary = "Add new Book")]
+        [SwaggerResponse(201, "Return Created if book Add Successfully")]
+        [SwaggerResponse(400, "If Invalid Book Data")]
         public IActionResult add(AddBookDTO bookDTO)
         {
             if (ModelState.IsValid)
@@ -86,6 +95,9 @@ namespace BookStoreAPI.Controllers
         }
         [HttpPut("{id}")]
         [Authorize(Roles ="admin")]
+        [SwaggerOperation(Summary = "Edit in a Book data")]
+        [SwaggerResponse(204, "if book updated Successfully")]
+        [SwaggerResponse(400, "If Invalid Book Data")]
         public IActionResult edit(int id, AddBookDTO bookDTO)
         {
             if (ModelState.IsValid)
@@ -125,15 +137,13 @@ namespace BookStoreAPI.Controllers
         }
         [HttpDelete]
         [Authorize(Roles ="admin")]
+        [SwaggerOperation(Summary = "Delete a Book")]
+        [SwaggerResponse(200, " if book Deleted Successfully")]
         public IActionResult delete(int id)
         {
-            if (ModelState.IsValid)
-            {
                 _unit.BooksRepositry.delete(id);
                 _unit.savechanges();
                 return Ok();
-            }
-            return BadRequest(ModelState);
         }
     }
 }
