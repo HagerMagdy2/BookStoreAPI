@@ -9,6 +9,7 @@ namespace BookStoreAPI.UnitOfWork
         GenericRepository<Book> booksRepository;
         GenericRepository<Order> ordersRepository;
         GenericRepository<OrderDetails> orderDetailsRepository;
+        GenericRepository<Author> authersRepository;
         public UnitOFWork(BookStoreContext db)
         {
             this.db = db;
@@ -39,7 +40,8 @@ namespace BookStoreAPI.UnitOfWork
                 return ordersRepository;
             }
 
-        } public GenericRepository<OrderDetails> OrderDetailsRepositry
+        } 
+        public GenericRepository<OrderDetails> OrderDetailsRepositry
         {
             get
             {
@@ -48,6 +50,17 @@ namespace BookStoreAPI.UnitOfWork
                     orderDetailsRepository = new GenericRepository<OrderDetails>(db);
                 }
                 return orderDetailsRepository;
+            }
+
+        }  public GenericRepository<Author> AuthorsRepositry
+        {
+            get
+            {
+                if (authersRepository == null)
+                {
+                    authersRepository = new GenericRepository<Author>(db);
+                }
+                return authersRepository;
             }
 
         }
