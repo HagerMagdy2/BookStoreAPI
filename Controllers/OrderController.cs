@@ -59,6 +59,16 @@ namespace BookStoreAPI.Controllers
             return Ok();
 
         }
+        [HttpDelete]
+        public IActionResult delete(int id)
+        {
+            var order_id= _unit.OrdersRepositry.selectbyid(id);
+            var order_idD =_unit.OrderDetailsRepositry.selectbyid(order_id.id);
+            _unit.OrdersRepositry.delete(order_id.id);
+            _unit.OrderDetailsRepositry.delete(order_id.id);
+            _unit.savechanges();
+            return Ok();
+        }
 
         }
     }
