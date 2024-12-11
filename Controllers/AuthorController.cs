@@ -1,9 +1,7 @@
 ﻿using BookStoreAPI.DTOs.AuthorDTO;
-using BookStoreAPI.DTOs.BookDTO;
 using BookStoreAPI.Models;
 using BookStoreAPI.UnitOfWork;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
