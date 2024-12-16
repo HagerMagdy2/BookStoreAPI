@@ -1,7 +1,9 @@
-﻿using BookStoreAPI.DTOs.BookDTO;
+﻿using AutoMapper;
+using BookStoreAPI.DTOs.BookDTO;
 using BookStoreAPI.Models;
 using BookStoreAPI.UnitOfWork;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -9,13 +11,15 @@ namespace BookStoreAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "admin,customer")]
+   // [Authorize(Roles = "admin,customer")]
     public class BooksController : ControllerBase
     {
         UnitOFWork _unit;
-        public BooksController(UnitOFWork _unit)
+        IMapper _mapper;
+        public BooksController(UnitOFWork _unit,IMapper _mapper)
         {
             this._unit = _unit;
+            this._mapper = _mapper;
 
         }
         [HttpGet]
@@ -70,7 +74,7 @@ namespace BookStoreAPI.Controllers
             }
         }
         [HttpPost]
-        [Authorize(Roles ="admin")]
+      //  [Authorize(Roles ="admin")]
         [SwaggerOperation(Summary = "Add new Book")]
         [SwaggerResponse(201, "Return Created if book Add Successfully")]
         [SwaggerResponse(400, "If Invalid Book Data")]
@@ -78,15 +82,16 @@ namespace BookStoreAPI.Controllers
         {
             if (ModelState.IsValid)
             {
-                Book book = new Book()
-                {
-                    title = bookDTO.title,
-                    price = bookDTO.price,
-                    publishdate = bookDTO.publishdate,
-                    srock = bookDTO.srock,
-                    author_id = bookDTO.author_id,
-                    cat_id = bookDTO.cat_id,
-                };
+                //    Book book = new Book()
+                //    {
+                //        title = bookDTO.title,
+                //        price = bookDTO.price,
+                //        publishdate = bookDTO.publishdate,
+                //        srock = bookDTO.srock,
+                //        author_id = bookDTO.author_id,
+                //        cat_id = bookDTO.cat_id,
+                //    };
+                Book book=  _mapper.Map<Book>(bookDTO);
                 _unit.BooksRepositry.add(book);
                 _unit.savechanges();
                 return CreatedAtAction("getById", new { id = book.id }, bookDTO);

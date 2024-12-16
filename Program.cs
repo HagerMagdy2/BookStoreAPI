@@ -1,4 +1,5 @@
 
+using BookStoreAPI.MapperConfig;
 using BookStoreAPI.Models;
 using BookStoreAPI.UnitOfWork;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -49,6 +50,10 @@ namespace BookStoreAPI
                 };
 
             });
+            #endregion
+            #region AutoMapper
+
+            builder.Services.AddAutoMapper(typeof(BookMapperConfig));
             #endregion
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
