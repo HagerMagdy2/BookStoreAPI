@@ -64,9 +64,9 @@ namespace BookStoreAPI.Controllers
         public IActionResult delete(int id)
         {
             var order_id= _unit.OrdersRepositry.selectbyid(id);
-            var order_idD =_unit.OrderDetailsRepositry.selectbyid(order_id.id);
+           // var order_idD =_unit.OrderDetailsRepositry.selectbyid(order_id.id);
             _unit.OrdersRepositry.delete(order_id.id);
-            _unit.OrderDetailsRepositry.deleteOD(order_idD.order_id,order_idD.book_id);
+           // _unit.OrderDetailsRepositry.deleteOD(order_idD.order_id,order_idD.book_id);
             _unit.savechanges();
             return Ok();
         }
