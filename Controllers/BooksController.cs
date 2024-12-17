@@ -37,7 +37,7 @@ namespace BookStoreAPI.Controllers
                     title = book.title,
                     price = book.price,
                     publishdate = book.publishdate,
-                    srock = book.srock,
+                    srock = book.stock,
                     catalog = book.catlog.name,
                     authorname = book.author.name
                 };
@@ -66,7 +66,7 @@ namespace BookStoreAPI.Controllers
                     title = book.title,
                     price = book.price,
                     publishdate = book.publishdate,
-                    srock = book.srock,
+                    srock = book.stock,
                     catalog = book.catlog.name,
                     authorname = book.author.name
                 };
@@ -129,7 +129,7 @@ namespace BookStoreAPI.Controllers
                     title = bookDTO.title,
                     price = bookDTO.price,
                     publishdate = bookDTO.publishdate,
-                    srock = bookDTO.srock,
+                    stock = bookDTO.srock,
                     author_id = bookDTO.author_id,
                     cat_id = bookDTO.cat_id,
                 };

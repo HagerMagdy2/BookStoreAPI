@@ -10,7 +10,7 @@ namespace BookStoreAPI.Models
         public string title { get; set; }
         [Column(TypeName ="money")]
         public decimal price { get; set; }
-        public int srock { get; set; }
+        public int stock { get; set; }
         [Column(TypeName = "date")]
         public DateOnly publishdate { get; set; }
         [ForeignKey("catlog")]

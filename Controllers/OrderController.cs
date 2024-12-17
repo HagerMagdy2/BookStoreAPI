@@ -39,11 +39,11 @@ namespace BookStoreAPI.Controllers
                     quantity = item.quantity,
                     unitprice = book.price,
                 };
-                if (book.srock > _details.quantity)
+                if (book.stock > _details.quantity)
                 {
                     _unit.OrderDetailsRepositry.add(_details);
 
-                    book.srock -= item.quantity;
+                    book.stock -= item.quantity;
                     _unit.BooksRepositry.update(book);
 
                 }
@@ -105,32 +105,24 @@ namespace BookStoreAPI.Controllers
         [HttpPut]
         public IActionResult EditOrder(int orderId, EditOrderDTO _order)
         {
-            // First, retrieve the existing order
+            
             Order existingOrder = _unit.OrdersRepositry.selectbyid(orderId);
             if (existingOrder == null)
             {
                 return NotFound("Order not found");
             }
 
-            // Check if order is in a state that can be edited
-            if (existingOrder.status != "create")
-            {
-                return BadRequest("Order cannot be modified at this stage");
-            }
 
-            // Remove existing order details
-            var existingOrderDetails = _unit.OrderDetailsRepositry
-                .GetAll()
-                .Where(od => od.order_id == orderId)
-                .ToList();
+            var existingOrderDetails = _unit.OrderDetailsRepositry.selectall().Where(od=>od.order_id == orderId).ToString();
+
 
             // Restore previous book stocks
             foreach (var existingDetail in existingOrderDetails)
             {
-                var book = _unit.BooksRepositry.selectbyid(existingDetail.book_id);
-                book.srock += existingDetail.quantity;
+                var book = _unit.BooksRepositry.selectbyid(existingDetail);
+                book.stock += existingDetail;
                 _unit.BooksRepositry.update(book);
-                _unit.OrderDetailsRepositry.delete(existingDetail.id);
+                _unit.OrderDetailsRepositry.delete(existingDetail);
             }
 
             // Recalculate total price
@@ -150,23 +142,23 @@ namespace BookStoreAPI.Controllers
                 };
 
                 // Check stock availability
-                if (book.srock >= _details.quantity)
+                if (book.stock >= _details.quantity)
                 {
                     _unit.OrderDetailsRepositry.add(_details);
-                    book.srock -= item.quantity;
+                    book.stock -= item.quantity;
                     _unit.BooksRepositry.update(book);
                 }
                 else
                 {
-                    // Rollback stock changes
-                    //foreach (var existingDetail in )
-                    //{
-                    //    var rollbackBook = _unit.BooksRepositry.selectbyid(existingDetail.book_id);
-                    //    rollbackBook.srock += existingDetail.quantity;
-                    //    _unit.BooksRepositry.update(rollbackBook);
-                    //    _unit.OrderDetailsRepositry.delete(existingDetail.id);
-                    //}
-                    return BadRequest("Invalid Quantity");
+                   // Rollback stock changes
+                    foreach (var existingDetail in existingOrderDetails)
+                    {
+                        var rollbackBook = _unit.BooksRepositry.selectbyid(existingDetail);
+                        rollbackBook.stock += existingDetail;
+                        _unit.BooksRepositry.update(rollbackBook);
+                        _unit.OrderDetailsRepositry.delete(existingDetail);
+                        }
+                        return BadRequest("Invalid Quantity");
                 }
             }
 
