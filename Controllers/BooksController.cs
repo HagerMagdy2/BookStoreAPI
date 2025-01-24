@@ -11,7 +11,7 @@ namespace BookStoreAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-   // [Authorize(Roles = "admin,customer")]
+   [Authorize(Roles = "admin,customer")]
     public class BooksController : ControllerBase
     {
         UnitOFWork _unit;
@@ -37,7 +37,7 @@ namespace BookStoreAPI.Controllers
                     title = book.title,
                     price = book.price,
                     publishdate = book.publishdate,
-                    srock = book.stock,
+                    stock = book.stock,
                     catalog = book.catlog.name,
                     authorname = book.author.name
                 };
@@ -66,7 +66,7 @@ namespace BookStoreAPI.Controllers
                     title = book.title,
                     price = book.price,
                     publishdate = book.publishdate,
-                    srock = book.stock,
+                    stock = book.stock,
                     catalog = book.catlog.name,
                     authorname = book.author.name
                 };
@@ -74,7 +74,7 @@ namespace BookStoreAPI.Controllers
             }
         }
         [HttpPost]
-      //  [Authorize(Roles ="admin")]
+        [Authorize(Roles ="admin")]
         [SwaggerOperation(Summary = "Add new Book")]
         [SwaggerResponse(201, "Return Created if book Add Successfully")]
         [SwaggerResponse(400, "If Invalid Book Data")]
